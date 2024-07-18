@@ -9,11 +9,15 @@
     <meta name="author" content="">
     <link href="{{ asset('img/logo/logo.png') }}" rel="icon">
     <title>Furrion GYM - Dashboard</title>
-    <link href="{{ asset('/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('/css/ruang-admin.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
     {{-- LINK CDN --}}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
 </head>
@@ -39,21 +43,15 @@
                 Menu GYM
             </div>
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="{{ route('admin.paket') }}">
                     <i class="fas fa-fw fa-palette"></i>
                     <span>Paket & Harga</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="{{ route('admin.member') }}">
                     <i class="fas fa-fw fa-palette"></i>
                     <span>Member GYM</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <i class="fas fa-fw fa-palette"></i>
-                    <span>Kehadiran Member</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -72,6 +70,12 @@
             <div class="sidebar-heading">
                 Barang Inventaris
             </div>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-fw fa-palette"></i>
+                    <span>Tabel Barang</span>
+                </a>
+            </li>
         </ul>
         <!-- Sidebar -->
         <div id="content-wrapper" class="d-flex flex-column">

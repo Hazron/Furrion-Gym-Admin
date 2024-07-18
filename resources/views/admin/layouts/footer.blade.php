@@ -6,7 +6,7 @@
                 <script>
                     document.write(new Date().getFullYear());
                 </script> - developed by
-                <b><a href="https://indrijunanda.gitlab.io/" target="_blank">Hazron Redian</a></b>
+                <b><a href="https://github.com/hazron/" target="_blank">Hazron Redian</a></b>
             </span>
         </div>
     </div>
@@ -30,6 +30,17 @@
 <script src="{{ asset('js/demo/chart-area-demo.js') }}"></script>
 <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+</script>
+<script>
+    $(function() {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+
 </body>
 
 </html>
