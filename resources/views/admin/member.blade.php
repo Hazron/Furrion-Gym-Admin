@@ -29,6 +29,7 @@
                                 <th>Paket Member</th>
                                 <th>Tanggal Selesai</th>
                                 <th>Status</th>
+                                <th>Nomor Telepon</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -41,6 +42,7 @@
                                     PreSale 2 Bulan </td>
                                 <td>18 September 2024</td>
                                 <td>Aktif</td>
+                                <td>089627451953</td>
                                 <td>
                                     <div class="dropdown">
                                         <button class="btn btn-sm btn-secondary dropdown-toggle" type="button"
@@ -81,6 +83,10 @@
                             <div class="form-group">
                                 <label for="nama_paket" class="col-form-label">Nama Lengkap</label>
                                 <input type="text" class="form-control" id="nama" name="nama">
+                            </div>
+                            <div class="form-group">
+                                <label for="nama_paket" class="col-form-label">Nomor Telepon</label>
+                                <input type="number" class="form-control" id="no_telpon" name="no_telpon">
                             </div>
                             <div class="form-group">
                                 <label for="nama_paket" class="col-form-label">Jenis Kelamin</label>

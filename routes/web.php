@@ -1,16 +1,20 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\PaketMemberController;
-use App\Http\Controllers\Admin\MemberController;
 
 Route::get('/', function () {
-    return view('admin.dashboard');
+    return view('welcome');
 });
 
-// Route::middleware([''])->group(function () {
-//     Route::get('/paket', [PaketMemberController::class, 'index'])->name('paket');
-// });
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/paket', [PaketMemberController::class, 'index'])->name('admin.paket');
-route::get('/member', [MemberController::class, 'index'])->name('admin.member');
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';
