@@ -26,18 +26,21 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/dashboard-admin', [DashboardController::class, 'index'])->name('admin.dashboard');
-
+    //
     Route::get('/paket', [PaketMemberController::class, 'index'])->name('admin.paket');
     Route::post('/paket/store', [PaketMemberController::class, 'store'])->name('paket.store');
     Route::get('/paket/data', [PaketMemberController::class, 'getData'])->name('paket.data');
     Route::get('/paket/edit', [PaketMemberController::class, 'edit'])->name('paket.edit');
     Route::put('/paket/update', [PaketMemberController::class, 'update'])->name('paket.update');
     Route::delete('/paket/delete/{id}', [PaketMemberController::class, 'destroy'])->name('paket.destroy');
-
+    //  
 
     route::get('/member', [MemberController::class, 'index'])->name('admin.member');
+    Route::post('/member/store', [MemberController::class, 'store'])->name('members.store');
+    Route::get('data-members', [MemberController::class, 'getData'])->name('data.members');
+
     route::get('/personal-trainner', [PersonalTrainerController::class, 'index'])->name('admin.trainer');
-    route::get('/invoice', [invoiceController::class, 'index'])->name('admin.invoice');
+    route::get('/invoicee', [invoiceController::class, 'index'])->name('admin.invoice');
     route::get('/barang', [barangController::class, 'index'])->name('admin.barang');
 });
 

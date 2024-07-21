@@ -20,10 +20,9 @@
                     </button>
                 </div>
                 <div class="table-responsive p-3">
-                    <table class="table align-items-center table-flush table-hover" id="dataTableHover">
+                    <table class="table align-items-center table-flush table-hover" id="dataTableMember">
                         <thead class="thead-light">
                             <tr>
-                                <th>QR Code</th>
                                 <th>Tanggal Daftar</th>
                                 <th>Nama Member</th>
                                 <th>Paket Member</th>
@@ -33,35 +32,6 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td><img src="{{ asset('img/contoh-qr.png') }}" alt="" width="85"></td>
-                                <td>15 Juli 2024</td>
-                                <th>Muhammad Hazron Redian</th>
-                                <td>
-                                    PreSale 2 Bulan </td>
-                                <td>18 September 2024</td>
-                                <td>Aktif</td>
-                                <td>089627451953</td>
-                                <td>
-                                    <div class="dropdown">
-                                        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button"
-                                            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                            aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v"></i>
-                                        </button>
-                                        <div class="dropdown-menu dropdown-menu-right"
-                                            aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item" href="#">Tambah Paket</a>
-                                            <a class="dropdown-item" href="#">Cetak Kartu Member</a>
-                                            <a class="dropdown-item" href="#">Edit</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item text-danger" href="#">Delete</a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
                     </table>
                 </div>
             </div>
@@ -79,39 +49,42 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form>
+                        <form method="POST" action="{{ route('members.store') }}" enctype="multipart/form-data">
+                            @csrf
                             <div class="form-group">
-                                <label for="nama_paket" class="col-form-label">Nama Lengkap</label>
-                                <input type="text" class="form-control" id="nama" name="nama">
+                                <label for="nama" class="col-form-label">Nama Lengkap</label>
+                                <input type="text" class="form-control" id="nama" name="nama" required>
                             </div>
                             <div class="form-group">
-                                <label for="nama_paket" class="col-form-label">Nomor Telepon</label>
-                                <input type="number" class="form-control" id="no_telpon" name="no_telpon">
+                                <label for="no_telpon" class="col-form-label">Nomor Telepon</label>
+                                <input type="number" class="form-control" id="no_telpon" name="no_telpon" required>
                             </div>
                             <div class="form-group">
-                                <label for="nama_paket" class="col-form-label">Jenis Kelamin</label>
-                                <select class="form-control" id="jenis_kelamin" name="jenis_kelamin">
+                                <label for="jenis_kelamin" class="col-form-label">Jenis Kelamin</label>
+                                <select class="form-control" id="jenis_kelamin" name="jenis_kelamin" required>
                                     <option value="">--Pilih--</option>
                                     <option value="Laki-laki">Laki-laki</option>
                                     <option value="Perempuan">Perempuan</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="Paket Member" class="col-form-label">Paket Member:</label>
-                                <select class="form-control" id="paket_member" name="paket_member">
+                                <label for="paket_member" class="col-form-label">Paket Member:</label>
+                                <select class="form-control" id="paket_member" name="paket_member" required>
                                     <option value="">--Pilih--</option>
-                                    {{-- @foreach ($pakets as $paket)
-                                        <option value="{{ $paket->id_paket }}">{{ $paket->nama_paket }}</option>
-                                    @endforeach --}}
+                                    @foreach ($paket as $item)
+                                        <option value="{{ $item->id_pakets }}">{{ $item->nama_paket }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="nama_paket" class="col-form-label">Bukti Pembayaran</label>
+                                <label for="bukti_pembayaran" class="col-form-label">Bukti Pembayaran (Opsional)</label>
                                 <input type="file" class="form-control" id="bukti_pembayaran"
                                     name="bukti_pembayaran">
                             </div>
+                            <button type="submit" class="btn btn-primary">Simpan</button>
                         </form>
                     </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-primary">Simpan</button>
@@ -126,5 +99,45 @@
 </div>
 <!---Container Fluid-->
 </div>
-
 @include('admin.layouts.footer')
+
+<script>
+    $(document).ready(function() {
+        $('#dataTableMember').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('data.members') }}",
+            columns: [{
+                    data: 'tanggal_daftar',
+                    name: 'tanggal_daftar'
+                },
+                {
+                    data: 'nama',
+                    name: 'nama'
+                },
+                {
+                    data: 'nama_paket',
+                    name: 'nama_paket'
+                },
+                {
+                    data: 'tanggal_selesai',
+                    name: 'tanggal_selesai'
+                },
+                {
+                    data: 'status',
+                    name: 'status'
+                },
+                {
+                    data: 'nomor_telepon',
+                    name: 'nomor_telepon'
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false
+                }
+            ]
+        });
+    });
+</script>

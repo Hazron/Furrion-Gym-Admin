@@ -16,7 +16,70 @@ function formatRupiah(input) {
     document.getElementById("harga_numeric").value = value.replace(",", ".");
 }
 
-$(document).ready(function () {
+function editPaket(button) {
+    let id = $(button).data('id');
+    let url = "{{ route('paket.edit') }}";
+
+    fetch(`${url}?id=${id}`)
+        .then(response => response.json())
+        .then(data => {
+            $('#edit_id').val(data.id_pakets);
+            $('#edit_nama_paket').val(data.nama_paket);
+            $('#edit_durasi').val(data.durasi);
+            $('#edit_harga').val(data.harga);
+            $('#edit_status').val(data.status);
+            $('#editModal').modal('show');
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+function hapusPaket(id) {
+    Swal.fire({
+        title: 'Apakah Anda yakin?',
+        text: "Data ini akan dihapus secara permanen.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, hapus!',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '{{ route('paket.destroy', ':id') }}'.replace(':id', id),
+                type: 'DELETE',
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire(
+                            'Terhapus!',
+                            response.message,
+                            'success'
+                        );
+                        $('#dataTableHover').DataTable().ajax.reload();
+                    } else {
+                        Swal.fire(
+                            'Gagal!',
+                            response.message,
+                            'error'
+                        );
+                    }
+                },
+                error: function(xhr) {
+                    Swal.fire(
+                        'Error!',
+                        'Terjadi kesalahan pada server.',
+                        'error'
+                    );
+                }
+            });
+        }
+    });
+}
+
+$(document).ready(function() {
     var table = $("#dataTableHover").DataTable({
         processing: true,
         serverSide: true,
@@ -28,40 +91,5 @@ $(document).ready(function () {
             { data: "status", name: "status" },
             { data: "aksi", name: "aksi", orderable: false, searchable: false },
         ],
-    });
-
-    // Event handler for Edit button
-    $("#dataTableHover").on("click", ".btn-warning", function () {
-        var id = $(this).data("id");
-        $.get("/paket/" + id + "/edit", function (data) {
-            $("#edit_id").val(data.id);
-            $("#edit_nama_paket").val(data.nama_paket);
-            $("#edit_durasi").val(data.durasi);
-            $("#edit_harga").val(data.harga);
-            $("#edit_status").val(data.status);
-            $("#editModal").modal("show");
-        });
-    });
-
-    // Save changes button click event
-    $("#saveChangesBtn").click(function () {
-        var formData = $("#editPaketForm").serialize();
-        var id = $("#edit_id").val();
-        $.ajax({
-            url: "/paket/" + id,
-            type: "PUT",
-            data: formData,
-            success: function (response) {
-                $("#editModal").modal("hide");
-                table.ajax.reload();
-                alert("Paket member berhasil diperbarui!");
-            },
-            error: function (xhr) {
-                alert(
-                    "Terjadi kesalahan saat memperbarui data: " +
-                        xhr.responseText
-                );
-            },
-        });
     });
 });

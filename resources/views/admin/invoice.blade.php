@@ -24,22 +24,11 @@
                                 <th>ID Invoice</th>
                                 <th>Nama Member</th>
                                 <th>Paket Member</th>
-                                <th>Personal Trainer</th>
                                 <th>Nominal</th>
                                 <th>Cetak</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>15 Juli 2024</td>
-                                <td>INV202431</td>
-                                <td>Muhammad Hazron Redian</td>
-                                <td>PreSale 1 Bulan</td>
-                                <td>Imran Azhar</td>
-                                <td>Rp 79.000</td>
-                                <td><a href="#" class="btn btn-sm btn-primary">Cetak</a></td>
-                            </tr>
-                        </tbody>
+
 
                     </table>
                 </div>

@@ -12,16 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('members', function (Blueprint $table) {
-            $table->id();
+            $table->id('id_members');
             $table->string('nama');
-            $table->string('email');
-            $table->string('paket_id');
-            $table->date('tanggal_daftar');
-            $table->date('tanggal_selesai');
-            $table->date('tanggal_perbarui')->nullable();
-            $table->string('status');
+            $table->string('jenis_kelamin');
+            $table->string('paket_id'); //berdasarkan table pakets
+            $table->date('tanggal_daftar'); //now
+            $table->date('tanggal_selesai'); // hitungan berdasarkan durasi pada tabel pakets PERBULAN
+            $table->date('tanggal_perbarui')->nullable(); //tanggal kapan dia perbaharui. 
+            $table->string('status')->default('aktif');
             $table->string('no_telpon');
-            $table->string('qr_code');
             $table->string('kartu_member')->nullable();
             $table->timestamps();
         });
