@@ -29,15 +29,7 @@
                                 <th>Aksi</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>Paket PreSale 1 Bulan</td>
-                                <td>1 Bulan</td>
-                                <td>Rp 79.000</td>
-                                <td>Aktif</td>
-                                <td><button>Edit</button></td>
-                            </tr>
-                        </tbody>
+
                     </table>
                 </div>
             </div>
@@ -55,39 +47,43 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form>
+
+                        <form action="{{ route('paket.store') }}" method="POST">
+                            @csrf
                             <div class="form-group">
                                 <label for="nama_paket" class="col-form-label">Nama Paket:</label>
-                                <input type="text" class="form-control" id="nama_paket">
+                                <input type="text" class="form-control" id="nama_paket" name="nama_paket" required>
                             </div>
                             <div class="form-group">
                                 <label for="durasi" class="col-form-label">Durasi:</label>
-                                <select class="form-control" id="durasi">
-                                    <option value="1 Bulan">1 Bulan</option>
-                                    <option value="2 Bulan">2 Bulan</option>
-                                    <option value="3 Bulan">3 Bulan</option>
-                                    <option value="6 Bulan">6 Bulan</option>
-                                    <option value="12 Bulan">12 Bulan</option>
+                                <select class="form-control" id="durasi" name="durasi" required>
+                                    <option value="1">1 Bulan</option>
+                                    <option value="2">2 Bulan</option>
+                                    <option value="3">3 Bulan</option>
+                                    <option value="6">6 Bulan</option>
+                                    <option value="12">12 Bulan</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="harga" class="col-form-label">Harga:</label>
-                                <input type="text" class="form-control" id="harga"
-                                    oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\d{3})(?=\d)/g, '$1.'); this.value = 'Rp ' + this.value;">
+                                <input type="text" name="harga" class="form-control" id="harga"
+                                    oninput="formatRupiah(this)" required>
                             </div>
                             <div class="form-group">
                                 <label for="status" class="col-form-label">Status:</label>
-                                <select class="form-control" id="status">
+                                <select class="form-control" id="status" name="status" required>
                                     <option>Aktif</option>
                                     <option>Tidak Aktif</option>
                                 </select>
                             </div>
-                        </form>
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Simpan</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
                     </div>
+                    </form>
+
                 </div>
             </div>
         </div>
@@ -98,4 +94,23 @@
 </div>
 <!---Container Fluid-->
 </div>
+<script>
+    function formatRupiah(input) {
+        let value = input.value.replace(/[^,\d]/g, '');
+        let split = value.split(',');
+        let sisa = split[0].length % 3;
+        let rupiah = split[0].substr(0, sisa);
+        let ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+        if (ribuan) {
+            let separator = sisa ? '.' : '';
+            rupiah += separator + ribuan.join('.');
+        }
+
+        rupiah = split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
+        input.value = 'Rp ' + rupiah;
+    }
+</script>
+
+
 @include('admin.layouts.footer')
