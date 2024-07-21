@@ -42,12 +42,20 @@ class MemberController extends Controller
                 return $member->no_telpon;
             })
             ->addColumn('action', function ($member) {
-                return '<button class="btn btn-warning btn-sm" data-id="' . $member->id_members . '" onclick="editMember(this)">Edit</button>
-                    <button class="btn btn-danger btn-sm" onclick="hapusMember(\'' . $member->id_members . '\')">Hapus</button>';
-                // '<form id="hapusMember_' . $member->id_members . '" action="' . route('members.destroy', $member->id_members) . '" method="POST" style="display: none;">
-                //     @csrf
-                //     @method("DELETE")
-                // </form>'
+                return '<div class="dropdown">
+                            <button class="btn btn-sm btn-secondary dropdown-toggle" type="button"
+                                id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right"
+                                aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Tambah Sesi</a>
+                                <a class="dropdown-item" href="#">Edit</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item text-danger" href="#" onclick="hapusMember(\'' . $member->id_members . '\')">Delete</a>
+                            </div>
+                        </div>';
             })
             ->rawColumns(['status', 'action', 'nama_paket'])
             ->make(true);
@@ -81,6 +89,21 @@ class MemberController extends Controller
         $invoice->tanggal = Carbon::now();
         $invoice->members_id = $members->id_members;
         $invoice->nominal = $paket->harga;
+        $invoice->tipe_invoice = 'Register Member';
+
+        if ($request->hasFile('bukti_pembayaran')) {
+            $file = $request->file('bukti_pembayaran');
+            $extension = $file->getClientOriginalExtension();
+            $size = $file->getSize();
+
+            if (in_array($extension, ['jpg', 'png']) && $size <= 500000) {
+                $filename = Str::random(10) . '.' . $extension;
+                $file->move(public_path('invoice'), $filename);
+                $invoice->bukti_pembayaran = $filename;
+            } else {
+                return redirect()->back()->with('error', 'File must be a JPG or PNG and under 500KB.');
+            }
+        }
         $invoice->save();
 
         return redirect()->back()->with('success', 'Berhasil menambahkan data member dan invoice');

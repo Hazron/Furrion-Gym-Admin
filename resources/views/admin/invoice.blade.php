@@ -25,11 +25,10 @@
                                 <th>Nama Member</th>
                                 <th>Paket Member</th>
                                 <th>Nominal</th>
+                                <th>Butki Pembayaran</th>
                                 <th>Cetak</th>
                             </tr>
                         </thead>
-
-
                     </table>
                 </div>
             </div>
