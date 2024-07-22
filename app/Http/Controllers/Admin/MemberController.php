@@ -157,4 +157,15 @@ class MemberController extends Controller
             ], 500);
         }
     }
+
+    public function autoDisableMember()
+    {
+        $currentDate = Carbon::now()->format('Y-m-d');
+        $members = Members::where('tanggal_selesai', $currentDate)->where('status', 'aktif')->get();
+
+        foreach ($members as $member) {
+            $member->status = 'tidak aktif';
+            $member->save();
+        }
+    }
 }
