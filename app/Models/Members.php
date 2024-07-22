@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Members extends Model
 {
@@ -26,4 +27,9 @@ class Members extends Model
         'qr_code',
         'kartu_member',
     ];
+
+    public function paket(): BelongsTo
+    {
+        return $this->belongsTo(Paket::class, 'paket_id', 'id_pakets');
+    }
 }

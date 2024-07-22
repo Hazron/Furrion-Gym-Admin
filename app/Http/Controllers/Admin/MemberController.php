@@ -11,13 +11,16 @@ use Carbon\Carbon;
 use Yajra\DataTables\DataTables;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
+
 
 class MemberController extends Controller
 {
     public function index()
     {
+        $member = Members::all();
         $paket = Paket::where('status', 'aktif')->get();
-        return view('admin.member', compact('paket'));
+        return view('admin.member', compact('paket', 'member'));
     }
 
     public function getData()
@@ -43,20 +46,23 @@ class MemberController extends Controller
             })
             ->addColumn('action', function ($member) {
                 return '<div class="dropdown">
-                            <button class="btn btn-sm btn-secondary dropdown-toggle" type="button"
-                                id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">
-                                <i class="fas fa-ellipsis-v"></i>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right"
-                                aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Tambah Sesi</a>
-                                <a class="dropdown-item" href="#">Edit</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item text-danger" href="#" onclick="hapusMember(\'' . $member->id_members . '\')">Delete</a>
-                            </div>
-                        </div>';
+                <button class="btn btn-sm btn-secondary dropdown-toggle" type="button"
+                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right"
+                    aria-labelledby="dropdownMenuButton">
+                    ' . ($member->status != 'aktif' ?
+                    '<a class="dropdown-item" href="#" data-toggle="modal" data-target="#tambahSesiModal" data-id="' . $member->id_members . '" onclick="setMemberId(' . $member->id_members . ')">Tambah Sesi</a>' :
+                    '<a class="dropdown-item disabled" href="#" tabindex="-1" aria-disabled="true">Tambah Sesi</a>') . '
+                    <a class="dropdown-item" href="#">Edit</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item text-danger" href="#" onclick="hapusMember(\'' . $member->id_members . '\')">Delete</a>
+                </div>
+            </div>';
             })
+
             ->rawColumns(['status', 'action', 'nama_paket'])
             ->make(true);
     }
@@ -107,5 +113,48 @@ class MemberController extends Controller
         $invoice->save();
 
         return redirect()->back()->with('success', 'Berhasil menambahkan data member dan invoice');
+    }
+
+    public function updateSesiMember(Request $request)
+    {
+        $request->validate([
+            'id_members' => 'required|exists:members,id_members',
+            'paket_id' => 'required|exists:pakets,id_pakets',
+            'bukti_pembayaran' => 'nullable|mimes:jpg,png|max:500',
+        ]);
+
+        try {
+            $member = Members::findOrFail($request->id_members); // Ubah id_member menjadi id_members
+            $paket = Paket::findOrFail($request->paket_id);
+            $member->tanggal_selesai = Carbon::now()->addMonths($paket->durasi);
+            $member->paket_id = $request->paket_id;
+            $member->status = 'aktif';
+            $member->save();
+
+            $invoice = new Invoice();
+            $invoice->tanggal = Carbon::now();
+            $invoice->members_id = $member->id_members;
+            $invoice->nominal = $paket->harga;
+            $invoice->tipe_invoice = 'Update Member';
+
+            if ($request->hasFile('bukti_pembayaran')) {
+                $file = $request->file('bukti_pembayaran');
+                $filename = Str::random(10) . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('invoice'), $filename);
+                $invoice->bukti_pembayaran = $filename;
+            }
+
+            $invoice->save();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Sesi member berhasil diperbarui.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

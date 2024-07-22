@@ -17,11 +17,11 @@
                     <h6 class="m-0 font-weight-bold text-primary">Daftar Seluruh Invoice</h6>
                 </div>
                 <div class="table-responsive p-3">
-                    <table class="table align-items-center table-flush table-hover" id="trainerDataTables">
+                    <table class="table align-items-center table-flush table-hover" id="invoiceDataTables">
                         <thead class="thead-light">
                             <tr>
                                 <th>Tanggal</th>
-                                <th>ID Invoice</th>
+                                <th>Tipe Invoice</th>
                                 <th>Nama Member</th>
                                 <th>Paket Member</th>
                                 <th>Nominal</th>
@@ -33,8 +33,6 @@
                 </div>
             </div>
         </div>
-
-
     </div>
     <!--Row-->
 
@@ -44,3 +42,43 @@
 </div>
 
 @include('admin.layouts.footer')
+<script>
+    $(document).ready(function() {
+        $('#invoiceDataTables').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('data-invoice') }}",
+            columns: [{
+                    data: 'tanggal',
+                    name: 'tanggal'
+                },
+                {
+                    data: 'tipe_invoice',
+                    name: 'tipe_invoice'
+                },
+                {
+                    data: 'nama',
+                    name: 'nama'
+                },
+                {
+                    data: 'nama_paket',
+                    name: 'nama_paket'
+                },
+                {
+                    data: 'nominal',
+                    name: 'nominal'
+                },
+                {
+                    data: 'bukti_pembayaran',
+                    name: 'bukti_pembayaran'
+                },
+                {
+                    data: 'cetak',
+                    name: 'cetak',
+                    orderable: false,
+                    searchable: false
+                }
+            ]
+        });
+    });
+</script>

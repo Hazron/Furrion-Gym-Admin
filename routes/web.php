@@ -38,9 +38,14 @@ Route::middleware(['auth', 'admin'])->group(function () {
     route::get('/member', [MemberController::class, 'index'])->name('admin.member');
     Route::post('/member/store', [MemberController::class, 'store'])->name('members.store');
     Route::get('data-members', [MemberController::class, 'getData'])->name('data.members');
+    Route::post('/member/update-sesi', [MemberController::class, 'updateSesiMember'])->name('member.update-sesi');
+
 
     route::get('/personal-trainner', [PersonalTrainerController::class, 'index'])->name('admin.trainer');
+
     route::get('/invoicee', [invoiceController::class, 'index'])->name('admin.invoice');
+    Route::get('data-invoice', [invoiceController::class, 'getData'])->name('data-invoice');
+
     route::get('/barang', [barangController::class, 'index'])->name('admin.barang');
 });
 
