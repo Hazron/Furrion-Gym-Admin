@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\invoiceController;
 use App\Http\Controllers\Admin\barangController;
 use App\Http\Controllers\Admin\DashboardController;
 
+Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
 
 Route::get('/', function () {
     return view('welcome');
@@ -42,11 +43,18 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 
     route::get('/personal-trainner', [PersonalTrainerController::class, 'index'])->name('admin.trainer');
+    Route::post('/personal_trainers/store', [PersonalTrainerController::class, 'store'])->name('personal_trainers.store');
+
 
     route::get('/invoicee', [invoiceController::class, 'index'])->name('admin.invoice');
     Route::get('data-invoice', [invoiceController::class, 'getData'])->name('data-invoice');
 
-    route::get('/barang', [barangController::class, 'index'])->name('admin.barang');
+    Route::get('/barang', [BarangController::class, 'index'])->name('admin.barang');
+
+    Route::post('/barang/store', [BarangController::class, 'store'])->name('barang.store');
+    Route::get('/barang/edit/{id}', [BarangController::class, 'edit'])->name('barang.edit');
+    Route::put('/barang/update/{id}', [BarangController::class, 'update'])->name('barang.update');
+    Route::delete('/barang/destroy/{id}', [BarangController::class, 'destroy'])->name('barang.destroy');
 });
 
 require __DIR__ . '/auth.php';

@@ -26,9 +26,11 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama Member</th>
-                                <th>Sesi</th>
+                                <th>Paket PT</th>
                                 <th>Personal Trainer</th>
+                                <th>Visit</th>
                                 <th>Tanggal Mulai</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -36,9 +38,11 @@
                             <tr>
                                 <td>1</td>
                                 <td>Muhammad Hazron Redian</td>
-                                <td>10 SESI Tersisa</td>
+                                <td>Couple 20x</td>
                                 <td>Sana</td>
+                                <td>2x</td>
                                 <td>15 Juli 2024</td>
+                                <th>Aktif</th>
                                 <td>
                                     <div class="dropdown">
                                         <button class="btn btn-sm btn-secondary dropdown-toggle" type="button"
@@ -74,40 +78,58 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form>
+                        <form action="{{ route('personal_trainers.store') }}" method="POST"
+                            enctype="multipart/form-data">
+                            @csrf
                             <div class="form-group">
                                 <label for="nama_member" class="col-form-label">Nama Member:</label>
-                                <select class="form-control" id="nama_member">
-                                    <option value="">--Pilih--</option>
-                                    <option value="1">John Doe</option>
-                                    <option value="2">Jane Doe</option>
-                                </select>
+                                <input type="text" class="form-control" id="nama" name="nama">
                             </div>
+
                             <div class="form-group">
                                 <label for="nama_trainer" class="col-form-label">Nama Trainer:</label>
-                                <select class="form-control" id="nama_trainer">
+                                <select class="form-control" id="nama_trainer" name="nama_trainer">
                                     <option value="">--Pilih--</option>
-                                    <option value="1">John Doe</option>
-                                    <option value="2">Jane Doe</option>
+                                    <option value="Emo">Emo</option>
+                                    <option value="Heri">Heri</option>
+                                    <option value="Edo">Edo</option>
                                 </select>
                             </div>
+
                             <div class="form-group">
                                 <label for="sesi" class="col-form-label">Sesi:</label>
-                                <select class="form-control" id="sesi">
+                                <select class="form-control" id="sesi" name="sesi">
                                     <option value="">--Pilih--</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
+                                    <option value="1">Single Session 10x</option>
+                                    <option value="2">Single Session 20x</option>
+                                    <option value="3">Single Session 50x</option>
+                                    <hr>
+                                    <option value="4">Couple Session 10x</option>
+                                    <option value="5">Couple Session 20x</option>
+                                    <option value="6">Couple Session 50x</option>
                                 </select>
                             </div>
+
+                            <div class="form-group">
+                                <label for="nominal" class="col-form-label">Harga :</label>
+                                <input type="text" class="form-control" id="nominal" name="nominal" disabled>
+                            </div>
+
                             <div class="form-group">
                                 <label for="tanggal_mulai" class="col-form-label">Tanggal Mulai:</label>
-                                <input type="date" class="form-control" id="tanggal_mulai">
+                                <input type="date" class="form-control" id="tanggal_mulai" name="tanggal_mulai"
+                                    value="{{ date('Y-m-d') }}">
                             </div>
+                            <div class="form-group">
+                                <label for="bukti_pembayaran">Bukti Pembayaran (Opsional)</label>
+                                <input type="file" class="form-control" id="bukti_pembayaran"
+                                    name="bukti_pembayaran">
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
                     </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-primary">Simpan</button>
@@ -122,5 +144,43 @@
 </div>
 <!---Container Fluid-->
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const sesiSelect = document.getElementById('sesi');
+        const nominalInput = document.getElementById('nominal');
+
+        const hargaSesi = {
+            '1': 'Rp 1.200.000',
+            '2': 'Rp 2.000.000',
+            '3': 'Rp 4.000.000',
+            '4': 'Rp 2.000.000',
+            '5': 'Rp 3.800.000',
+            '6': 'Rp 7.000.000'
+        };
+
+        const sesi = {
+            '1': 'Single Session 10x',
+            '2': 'Single Session 20x',
+            '3': 'Single Session 50x',
+            '4': 'Couple Session 10x',
+            '5': 'Couple Session 20x',
+            '6': 'Couple Session 50x',
+        }
+
+        const maksimal_visit = {
+            '1': '10',
+            '2': '20',
+            '3': '50',
+            '4': '10',
+            '5': '20',
+            '6': '50',
+        }
+
+        sesiSelect.addEventListener('change', function() {
+            const selectedValue = sesiSelect.value;
+            nominalInput.value = hargaSesi[selectedValue] || 'Pilih sesi terlebih dahulu';
+        });
+    });
+</script>
 
 @include('admin.layouts.footer')

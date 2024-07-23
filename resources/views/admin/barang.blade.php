@@ -10,7 +10,6 @@
     </div>
 
     <div class="row mb-3">
-        <!-- DataTable with Hover -->
         <div class="col-lg-12">
             <div class="card mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -21,7 +20,7 @@
                 </div>
 
                 <div class="table-responsive p-3">
-                    <table class="table align-items-center table-flush table-hover" id="trainerDataTables">
+                    <table class="table align-items-center table-flush table-hover" id="barangDataTables">
                         <thead class="thead-light">
                             <tr>
                                 <th>No</th>
@@ -33,36 +32,32 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>BRG001</td>
-                                <td>Suplemen Protein Whey</td>
-                                <td>100</td>
-                                <td>Rp 150.000</td>
-                                <td><button>Edit</button></td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>BRG002</td>
-                                <td>Suplemen Vitamin D</td>
-                                <td>50</td>
-                                <td>Rp 80.000</td>
-                                <td><button>Edit</button></td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>BRG003</td>
-                                <td>Suplemen Omega 3</td>
-                                <td>200</td>
-                                <td>Rp 200.000</td>
-                                <td><button>Edit</button></td>
-                            </tr>
+                            @foreach ($barang as $item)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $item->id_barang }}</td>
+                                    <td>{{ $item->nama_barang }}</td>
+                                    <td>{{ $item->qty }}</td>
+                                    <td>{{ $item->harga }}</td>
+                                    <td>
+                                        <a href="{{ route('barang.edit', $item->id_barang) }}"
+                                            class="btn btn-sm btn-primary">Edit</a>
+                                        <a href="#" class="btn btn-sm btn-success">Terjual</a>
+                                        <form action="{{ route('barang.destroy', $item->id_barang) }}" method="POST"
+                                            style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
                     </table>
                 </div>
             </div>
         </div>
 
-        <!-- Modal Tambah Trainer -->
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -74,9 +69,10 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form>
+                        <form action="{{ route('barang.store') }}" method="POST">
+                            @csrf
                             <div class="form-group">
-                                <label for="nama_barng" class="col-form-label">Nama Barang:</label>
+                                <label for="nama_barang" class="col-form-label">Nama Barang:</label>
                                 <input type="text" class="form-control" id="nama_barang" name="nama_barang">
                             </div>
                             <div class="form-group">
@@ -85,24 +81,23 @@
                             </div>
                             <div class="form-group">
                                 <label for="tanggal_mulai" class="col-form-label">Tanggal Masuk:</label>
-                                <input type="date" class="form-control" id="tanggal_mulai"
+                                <input type="date" class="form-control" id="tanggal_mulai" name="tanggal_mulai"
                                     value="{{ date('Y-m-d') }}">
                             </div>
+                            <div class="form-group">
+                                <label for="harga" class="col-form-label">Harga:</label>
+                                <input type="text" class="form-control" id="harga" name="harga">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Simpan</button>
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Simpan</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!--Row-->
-
-
-</div>
-<!---Container Fluid-->
 </div>
 
 @include('admin.layouts.footer')
