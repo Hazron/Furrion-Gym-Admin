@@ -29,28 +29,31 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/dashboard-admin', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/cekMember/{nama}', [DashboardController::class, 'cekMember']);
 
-    //
+    //PAKET
     Route::get('/paket', [PaketMemberController::class, 'index'])->name('admin.paket');
     Route::post('/paket/store', [PaketMemberController::class, 'store'])->name('paket.store');
     Route::get('/paket/data', [PaketMemberController::class, 'getData'])->name('paket.data');
     Route::get('/paket/edit', [PaketMemberController::class, 'edit'])->name('paket.edit');
     Route::put('/paket/update', [PaketMemberController::class, 'update'])->name('paket.update');
     Route::delete('/paket/delete/{id}', [PaketMemberController::class, 'destroy'])->name('paket.destroy');
-    //  
 
+    //MEMBER
     route::get('/member', [MemberController::class, 'index'])->name('admin.member');
     Route::post('/member/store', [MemberController::class, 'store'])->name('members.store');
     Route::get('data-members', [MemberController::class, 'getData'])->name('data.members');
     Route::post('/member/update-sesi', [MemberController::class, 'updateSesiMember'])->name('member.update-sesi');
+    Route::delete('/members/{id}', [MemberController::class, 'deleteMember'])->name('members.delete');
 
 
+    //PERSONAL TRAINER
     route::get('/personal-trainner', [PersonalTrainerController::class, 'index'])->name('admin.trainer');
     Route::post('/personal_trainers/store', [PersonalTrainerController::class, 'store'])->name('personal_trainers.store');
 
-
+    //INVOICE
     route::get('/invoicee', [invoiceController::class, 'index'])->name('admin.invoice');
     Route::get('data-invoice', [invoiceController::class, 'getData'])->name('data-invoice');
 
+    //BARANG
     Route::get('/barang', [BarangController::class, 'index'])->name('admin.barang');
     Route::get('/barang/data', [BarangController::class, 'getData'])->name('barang.data');
     Route::post('/barang/store', [BarangController::class, 'store'])->name('barang.store');

@@ -46,22 +46,22 @@ class MemberController extends Controller
             })
             ->addColumn('action', function ($member) {
                 return '<div class="dropdown">
-                <button class="btn btn-sm btn-secondary dropdown-toggle" type="button"
-                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false">
-                    <i class="fas fa-ellipsis-v"></i>
-                </button>
-                <div class="dropdown-menu dropdown-menu-right"
-                    aria-labelledby="dropdownMenuButton">
-                    ' . ($member->status != 'aktif' ?
+        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button"
+            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">
+            <i class="fas fa-ellipsis-v"></i>
+        </button>
+        <div class="dropdown-menu dropdown-menu-right"
+            aria-labelledby="dropdownMenuButton">
+            ' . ($member->status != 'aktif' ?
                     '<a class="dropdown-item" href="#" data-toggle="modal" data-target="#tambahSesiModal" data-id="' . $member->id_members . '" onclick="setMemberId(' . $member->id_members . ')">Tambah Sesi</a>' :
                     '<a class="dropdown-item disabled" href="#" tabindex="-1" aria-disabled="true">Tambah Sesi</a>') . '
-                    <a class="dropdown-item" href="#">Edit</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item text-danger" href="#" onclick="hapusMember(\'' . $member->id_members . '\')">Delete</a>
-                </div>
-            </div>';
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item text-danger" href="#" onclick="hapusMember(\'' . $member->id_members . '\')">Delete</a>
+        </div>
+    </div>';
             })
+
 
             ->rawColumns(['status', 'action', 'nama_paket'])
             ->make(true);
@@ -158,6 +158,25 @@ class MemberController extends Controller
         }
     }
 
+    public function destroy($id)
+    {
+        try {
+            $member = Members::findOrFail($id);
+            $member->delete();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Member berhasil dihapus.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+
     public function autoDisableMember()
     {
         $currentDate = Carbon::now()->format('Y-m-d');
@@ -168,4 +187,16 @@ class MemberController extends Controller
             $member->save();
         }
     }
+
+    public function deleteMember($id)
+    {
+        $member = Members::findOrFail($id);
+
+        // Lakukan operasi penghapusan jika diperlukan, misalnya menghapus file terkait
+
+        $member->delete();
+
+        return response()->json(['status' => 'success', 'message' => 'Member berhasil dihapus.']);
+    }
+
 }
