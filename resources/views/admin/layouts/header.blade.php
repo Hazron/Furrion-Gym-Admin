@@ -10,7 +10,9 @@
     <link href="{{ asset('img/logo/logo.png') }}" rel="icon">
     <title>Furrion GYM - Dashboard</title>
     <link href="{{ asset('/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ asset('/css/ruang-admin.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/ruang-admin.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/ruang-admin.css') }}" rel="stylesheet">
+
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
     {{-- LINK CDN --}}

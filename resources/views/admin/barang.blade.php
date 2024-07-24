@@ -22,9 +22,19 @@
                 <div class="table-responsive p-3">
                     <table class="table align-items-center table-flush table-hover" id="barangDataTables">
                         <thead class="thead-light">
+                            @if (session('success'))
+                                <div class="alert alert-success">
+                                    {{ session('success') }}
+                                </div>
+                            @endif
+
+                            @if (session('error'))
+                                <div class="alert alert-danger">
+                                    {{ session('error') }}
+                                </div>
+                            @endif
                             <tr>
                                 <th>No</th>
-                                <th>ID Barang</th>
                                 <th>Nama Barang</th>
                                 <th>Qty</th>
                                 <th>Harga</th>
@@ -32,32 +42,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($barang as $item)
-                                <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $item->id_barang }}</td>
-                                    <td>{{ $item->nama_barang }}</td>
-                                    <td>{{ $item->qty }}</td>
-                                    <td>Rp.{{ number_format($item->harga, 2, ',', '.') }}</td>
-                                    <td>
-                                        <a href="{{ route('barang.edit', $item->id_barang) }}"
-                                            class="btn btn-sm btn-primary">Edit</a>
-                                        <a href="#" class="btn btn-sm btn-success">Terjual</a>
-                                        <form action="{{ route('barang.destroy', $item->id_barang) }}" method="POST"
-                                            style="display:inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endforeach
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
 
+        <!-- Modal Tambah Barang -->
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -98,8 +89,9 @@
                             <div class="form-group">
                                 <label for="harga" class="col-form-label">Harga:</label>
                                 <input type="text" name="harga" class="form-control" id="harga"
-                                    oninput="formatRupiah(this)" value="{{ old('harga') }}" required>
-                                <input type="hidden" name="harga_numeric" id="harga_numeric">
+                                    oninput="formatRupiah(this)" value="{{ old('harga', 0) }}" required>
+                                <input type="hidden" name="harga_numeric" id="harga_numeric"
+                                    value="{{ old('harga_numeric', 0) }}">
                                 @error('harga')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -113,7 +105,9 @@
                 </div>
             </div>
         </div>
+
     </div>
+</div>
 </div>
 
 @include('admin.layouts.footer')
@@ -135,6 +129,44 @@
         input.value = "Rp " + rupiah;
 
         let numericValue = value.replace(/,/g, ".");
-        document.getElementById("harga_numeric").value = numericValue;
+        input.id === "edit_harga" ?
+            document.getElementById("edit_harga_numeric").value = numericValue :
+            document.getElementById("harga_numeric").value = numericValue;
     }
+
+    $(document).ready(function() {
+        $('#barangDataTables').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: '{{ route('barang.data') }}',
+            columns: [{
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'nama_barang',
+                    name: 'nama_barang'
+                },
+                {
+                    data: 'qty',
+                    name: 'qty'
+                },
+                {
+                    data: 'harga',
+                    name: 'harga'
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false
+                },
+            ],
+            order: [
+                [1, 'asc']
+            ]
+        });
+    });
 </script>

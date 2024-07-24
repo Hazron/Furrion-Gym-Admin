@@ -10,18 +10,6 @@ class RakBarang extends Model
 {
     use HasFactory;
 
-    protected $keyType = 'string';
-    public $incrementing = false;
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            $model->id_barang = 'BRG' . Str::upper(Str::random(3));
-        });
-    }
-
     protected $fillable = [
         'nama_barang',
         'qty',

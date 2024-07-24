@@ -27,6 +27,8 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/dashboard-admin', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/cekMember/{nama}', [DashboardController::class, 'cekMember']);
+
     //
     Route::get('/paket', [PaketMemberController::class, 'index'])->name('admin.paket');
     Route::post('/paket/store', [PaketMemberController::class, 'store'])->name('paket.store');
@@ -50,10 +52,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('data-invoice', [invoiceController::class, 'getData'])->name('data-invoice');
 
     Route::get('/barang', [BarangController::class, 'index'])->name('admin.barang');
+    Route::get('/barang/data', [BarangController::class, 'getData'])->name('barang.data');
     Route::post('/barang/store', [BarangController::class, 'store'])->name('barang.store');
-    Route::get('/barang/edit/{id}', [BarangController::class, 'edit'])->name('barang.edit');
-    Route::put('/barang/update/{id}', [BarangController::class, 'update'])->name('barang.update');
-    Route::delete('/barang/destroy/{id}', [BarangController::class, 'destroy'])->name('barang.destroy');
 });
 
 require __DIR__ . '/auth.php';

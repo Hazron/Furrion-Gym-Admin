@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\RakBarang;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Yajra\DataTables\Facades\DataTables;
 
 class BarangController extends Controller
 {
@@ -13,6 +14,25 @@ class BarangController extends Controller
     {
         $barang = RakBarang::all();
         return view('admin.barang', compact('barang'));
+    }
+
+    public function getData()
+    {
+        $barang = RakBarang::select(['id_barang', 'nama_barang', 'qty', 'harga']);
+
+        return DataTables::of($barang)
+            ->addIndexColumn()
+            ->addColumn('action', function ($item) {
+                return '
+                    <a href="#" class="btn btn-sm btn-primary">Edit</a>
+                    <a href="#" class="btn btn-sm btn-success">Terjual</a>
+                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                ';
+            })
+            ->editColumn('harga', function ($item) {
+                return 'Rp. ' . number_format($item->harga, 2, ',', '.');
+            })
+            ->make(true);
     }
 
     public function store(Request $request)
@@ -37,35 +57,5 @@ class BarangController extends Controller
             Log::error('Gagal menambah barang: ' . $e->getMessage());
             return redirect()->route('admin.barang')->with('error', 'Gagal menambah barang');
         }
-    }
-
-
-    public function edit($id)
-    {
-        $barang = RakBarang::findOrFail($id);
-        return view('admin.edit_barang', compact('barang'));
-    }
-
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'nama_barang' => 'required|string|max:255',
-            'qty' => 'required|integer|min:1',
-            'harga' => 'required|numeric|min:0',
-            'tanggal_mulai' => 'required|date',
-        ]);
-
-        $barang = RakBarang::findOrFail($id);
-        $barang->update($request->all());
-
-        return redirect()->route('barang.index')->with('success', 'Barang berhasil diupdate.');
-    }
-
-    public function destroy($id)
-    {
-        $barang = RakBarang::findOrFail($id);
-        $barang->delete();
-
-        return redirect()->route('barang.index')->with('success', 'Barang berhasil dihapus.');
     }
 }
