@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Invoice</title>
+        <style>
+            body {
+                font-family: sans-serif;
+            }
+
+            #invoice-table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            #invoice-table th,
+            #invoice-table td {
+                border: 1px solid #ddd;
+                padding: 8px;
+            }
+
+            #invoice-table th {
+                text-align: left;
+                background-color: #f0f0f0;
+            }
+
+            #invoice-table td {
+                text-align: right;
+            }
+
+            .invoice-header {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            .invoice-header img {
+                width: 200px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="invoice-header">
+            <img
+                src="https://www.logomaker.com/sample-logos/"
+                alt="Logo Perusahaan"
+            />
+            <h1>Invoice</h1>
+        </div>
+
+        <table id="invoice-table">
+            <tr>
+                <th>Invoice No</th>
+                <td>: #INV-12345</td>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td>: 2024-07-23</td>
+            </tr>
+            <tr>
+                <th>Due Date</th>
+                <td>: 2024-08-23</td>
+            </tr>
+            <tr>
+                <th>Customer</th>
+                <td>: John Doe</td>
+            </tr>
+            <tr>
+                <th>Address</th>
+                <td>: 123 Main Street, Anytown, CA 12345</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Total</th>
+            </tr>
+            <tr>
+                <td>Web Design Services</td>
+                <td>10</td>
+                <td>$50</td>
+                <td>$500</td>
+            </tr>
+            <tr>
+                <td>Domain Registration</td>
+                <td>1</td>
+                <td>$10</td>
+                <td>$10</td>
+            </tr>
+            <tr>
+                <td>Web Hosting</td>
+                <td>1</td>
+                <td>$100</td>
+                <td>$100</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td><b>Subtotal</b></td>
+                <td><b>$610</b></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td><b>VAT (10%)</b></td>
+                <td><b>$61</b></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td><b>Total</b></td>
+                <td><b>$671</b></td>
+            </tr>
+        </table>
+
+        <p><b>Payment Terms:</b></p>
+        <ul>
+            <li>Net 30 days</li>
+            <li>Payment by check or bank transfer</li>
+        </ul>
+    </body>
+</html>

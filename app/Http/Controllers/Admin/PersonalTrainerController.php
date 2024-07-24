@@ -13,7 +13,8 @@ class PersonalTrainerController extends Controller
     public function index()
     {
         $activeMembers = Members::where('status', 'aktif')->get();
-        return view('admin.pt', compact('activeMembers'));
+        $personalTrainers = PersonalTrainer::all();
+        return view('admin.pt', compact('activeMembers', 'personalTrainers'));
     }
 
     public function store(Request $request)

@@ -22,6 +22,26 @@
                     <div class="table-responsive p-3">
                         <table class="table align-items-center table-flush table-hover" id="dataTableMember">
                             <thead class="thead-light">
+                                @if ($errors->any())
+                                    <div class="alert alert-danger">
+                                        <ul>
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
+                                @if (session('success'))
+                                    <div class="alert alert-success">
+                                        {{ session('success') }}
+                                    </div>
+                                @endif
+
+                                @if (session('error'))
+                                    <div class="alert alert-danger">
+                                        {{ session('error') }}
+                                    </div>
+                                @endif
                                 <tr>
                                     <th>Tanggal Daftar</th>
                                     <th>Nama Member</th>
@@ -38,17 +58,7 @@
             </div>
 
             <!-- Pesan Flash -->
-            @if (session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
-            @endif
 
-            @if (session('error'))
-                <div class="alert alert-danger">
-                    {{ session('error') }}
-                </div>
-            @endif
 
             <!-- Modal Regis Member-->
             <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -106,15 +116,7 @@
                     </div>
                 </div>
             </div>
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+
             <!-- Modal Tambah Sesi -->
             <div class="modal fade" id="tambahSesiModal" tabindex="-1" role="dialog"
                 aria-labelledby="tambahSesiModalLabel" aria-hidden="true">

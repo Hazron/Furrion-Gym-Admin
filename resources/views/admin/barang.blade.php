@@ -38,7 +38,7 @@
                                     <td>{{ $item->id_barang }}</td>
                                     <td>{{ $item->nama_barang }}</td>
                                     <td>{{ $item->qty }}</td>
-                                    <td>{{ $item->harga }}</td>
+                                    <td>Rp.{{ number_format($item->harga, 2, ',', '.') }}</td>
                                     <td>
                                         <a href="{{ route('barang.edit', $item->id_barang) }}"
                                             class="btn btn-sm btn-primary">Edit</a>
@@ -73,20 +73,36 @@
                             @csrf
                             <div class="form-group">
                                 <label for="nama_barang" class="col-form-label">Nama Barang:</label>
-                                <input type="text" class="form-control" id="nama_barang" name="nama_barang">
+                                <input type="text" class="form-control" id="nama_barang" name="nama_barang"
+                                    value="{{ old('nama_barang') }}">
+                                @error('nama_barang')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="form-group">
-                                <label for="jumlah_barang" class="col-form-label">Jumlah Barang:</label>
-                                <input type="text" class="form-control" id="jumlah_barang" name="jumlah_barang">
+                                <label for="qty" class="col-form-label">Jumlah Barang:</label>
+                                <input type="number" class="form-control" id="qty" name="qty"
+                                    value="{{ old('qty') }}">
+                                @error('qty')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="form-group">
                                 <label for="tanggal_mulai" class="col-form-label">Tanggal Masuk:</label>
                                 <input type="date" class="form-control" id="tanggal_mulai" name="tanggal_mulai"
-                                    value="{{ date('Y-m-d') }}">
+                                    value="{{ old('tanggal_mulai', date('Y-m-d')) }}">
+                                @error('tanggal_mulai')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="form-group">
                                 <label for="harga" class="col-form-label">Harga:</label>
-                                <input type="text" class="form-control" id="harga" name="harga">
+                                <input type="text" name="harga" class="form-control" id="harga"
+                                    oninput="formatRupiah(this)" value="{{ old('harga') }}" required>
+                                <input type="hidden" name="harga_numeric" id="harga_numeric">
+                                @error('harga')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                             <button type="submit" class="btn btn-primary">Simpan</button>
                         </form>
@@ -101,3 +117,24 @@
 </div>
 
 @include('admin.layouts.footer')
+
+<script>
+    function formatRupiah(input) {
+        let value = input.value.replace(/[^,\d]/g, "");
+        let split = value.split(",");
+        let sisa = split[0].length % 3;
+        let rupiah = split[0].substr(0, sisa);
+        let ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+        if (ribuan) {
+            let separator = sisa ? "." : "";
+            rupiah += separator + ribuan.join(".");
+        }
+
+        rupiah = split[1] !== undefined ? rupiah + "," + split[1] : rupiah;
+        input.value = "Rp " + rupiah;
+
+        let numericValue = value.replace(/,/g, ".");
+        document.getElementById("harga_numeric").value = numericValue;
+    }
+</script>

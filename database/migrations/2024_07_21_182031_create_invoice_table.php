@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->id('id_invoice');
             $table->date('tanggal'); //tanggal ketika ada store/update members
-            $table->string('members_id'); //berasal dari tabel members
+            $table->string('members_id')->nullable(); //berasal dari tabel members
             $table->string('nominal');
             $table->string('tipe_invoice'); //update member, regis member, penjualan barang
             $table->string('bukti_pembayaran');

@@ -21,6 +21,17 @@
                 <div class="table-responsive p-3">
                     <table class="table align-items-center table-flush table-hover" id="dataTableHover">
                         <thead class="thead-light">
+                            @if (session('error'))
+                                <div class="alert alert-danger">
+                                    {{ session('error') }}
+                                </div>
+                            @endif
+
+                            @if (session('success'))
+                                <div class="alert alert-success">
+                                    {{ session('success') }}
+                                </div>
+                            @endif
                             <tr>
                                 <th>Nama Paket</th>
                                 <th>Durasi</th>
@@ -48,17 +59,6 @@
                     <div class="modal-body">
                         <form action="{{ route('paket.store') }}" method="POST">
                             @csrf
-                            @if (session('error'))
-                                <div class="alert alert-danger">
-                                    {{ session('error') }}
-                                </div>
-                            @endif
-
-                            @if (session('success'))
-                                <div class="alert alert-success">
-                                    {{ session('success') }}
-                                </div>
-                            @endif
                             <div class="form-group">
                                 <label for="nama_paket" class="col-form-label">Nama Paket:</label>
                                 <input type="text" class="form-control" id="nama_paket" name="nama_paket" required>

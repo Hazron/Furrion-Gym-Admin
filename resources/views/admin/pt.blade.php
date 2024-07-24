@@ -26,8 +26,8 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama Member</th>
-                                <th>Paket PT</th>
                                 <th>Personal Trainer</th>
+                                <th>Paket PT</th>
                                 <th>Visit</th>
                                 <th>Tanggal Mulai</th>
                                 <th>Status</th>
@@ -35,31 +35,38 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Muhammad Hazron Redian</td>
-                                <td>Couple 20x</td>
-                                <td>Sana</td>
-                                <td>2x</td>
-                                <td>15 Juli 2024</td>
-                                <th>Aktif</th>
-                                <td>
-                                    <div class="dropdown">
-                                        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button"
-                                            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                            aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v"></i>
-                                        </button>
-                                        <div class="dropdown-menu dropdown-menu-right"
-                                            aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item" href="#">Tambah Sesi</a>
-                                            <a class="dropdown-item" href="#">Edit</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item text-danger" href="#">Delete</a>
+                            @foreach ($personalTrainers as $index => $trainer)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $trainer->nama }}</td>
+                                    <td>{{ $trainer->personal_trainer }}</td>
+                                    <td>{{ $trainer->sesi }}</td>
+                                    <td>{{ $trainer->visit }}x</td>
+                                    <td>{{ \Carbon\Carbon::parse($trainer->tanggal_mulai)->format('d M Y') }}</td>
+                                    <td>{{ $trainer->status }}</td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-secondary dropdown-toggle" type="button"
+                                                id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                                aria-expanded="false">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </button>
+                                            <div class="dropdown-menu dropdown-menu-right"
+                                                aria-labelledby="dropdownMenuButton">
+                                                @if ($trainer->status == 'Aktif')
+                                                    <a class="dropdown-item disabled" href="#">Tambah Sesi</a>
+                                                @else
+                                                    <a class="dropdown-item" href="#">Tambah Sesi</a>
+                                                @endif
+                                                <a class="dropdown-item" href="#">Hadir</a>
+
+                                                <div class="dropdown-divider"></div>
+                                                <a class="dropdown-item text-danger" href="#">Delete</a>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -125,15 +132,13 @@
                                 <input type="file" class="form-control" id="bukti_pembayaran"
                                     name="bukti_pembayaran">
                             </div>
-
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </form>
                     </div>
-
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-primary">Simpan</button>
                     </div>
+                    </form>
+
                 </div>
             </div>
         </div>

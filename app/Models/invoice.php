@@ -27,4 +27,9 @@ class Invoice extends Model
     {
         return $this->belongsTo(Members::class, 'members_id', 'id_members');
     }
+
+    public function pt()
+    {
+        return $this->hasOne(PersonalTrainer::class, 'nama', 'members_id');
+    }
 }

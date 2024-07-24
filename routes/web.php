@@ -50,7 +50,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('data-invoice', [invoiceController::class, 'getData'])->name('data-invoice');
 
     Route::get('/barang', [BarangController::class, 'index'])->name('admin.barang');
-
     Route::post('/barang/store', [BarangController::class, 'store'])->name('barang.store');
     Route::get('/barang/edit/{id}', [BarangController::class, 'edit'])->name('barang.edit');
     Route::put('/barang/update/{id}', [BarangController::class, 'update'])->name('barang.update');
