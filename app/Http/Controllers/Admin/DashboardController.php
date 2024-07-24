@@ -4,13 +4,16 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Members;
+use App\Models\Invoice;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        return view('admin.dashboard');
+        $totalAmount = Invoice::sum('nominal');
+        $totalAmount = $totalAmount ? $totalAmount : 0;
+        return view('admin.dashboard', compact('totalAmount'));
     }
 
     public function cekMember($nama)

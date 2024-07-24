@@ -17,7 +17,8 @@
                     <div class="row align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-uppercase mb-1">Pendapatan (Perbulan)</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. 7.000.000</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp.
+                                {{ number_format($totalAmount, 0, ',', '.') }}</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-calendar fa-2x text-primary"></i>

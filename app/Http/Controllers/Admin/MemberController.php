@@ -124,7 +124,7 @@ class MemberController extends Controller
         ]);
 
         try {
-            $member = Members::findOrFail($request->id_members); // Ubah id_member menjadi id_members
+            $member = Members::findOrFail($request->id_members);
             $paket = Paket::findOrFail($request->paket_id);
             $member->tanggal_selesai = Carbon::now()->addMonths($paket->durasi);
             $member->paket_id = $request->paket_id;
