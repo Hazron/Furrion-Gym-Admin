@@ -23,7 +23,7 @@ class invoiceController extends Controller
                 return '<a href="' . url('invoice/' . $invoice->bukti_pembayaran) . '" target="_blank" class="btn btn-success btn-sm">Cetak</a>';
             })
             ->addColumn('nama', function ($invoice) {
-                return $invoice->member->nama;
+                return $invoice->member ? $invoice->member->nama : $invoice->members_id;
             })
             ->addColumn('nama_paket', function ($invoice) {
                 return $invoice->member->paket->nama_paket;

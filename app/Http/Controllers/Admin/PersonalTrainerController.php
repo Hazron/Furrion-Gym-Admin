@@ -7,6 +7,7 @@ use App\Models\Members;
 use App\Models\Invoice;
 use App\Models\PersonalTrainer;
 use Illuminate\Http\Request;
+use Illmuniate\Support\Facades\Log;
 
 class PersonalTrainerController extends Controller
 {
@@ -28,7 +29,6 @@ class PersonalTrainerController extends Controller
             'bukti_pembayaran' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:1028',
         ]);
 
-        // Menyimpan bukti pembayaran jika ada
         $bukti_pembayaran = null;
         if ($request->hasFile('bukti_pembayaran')) {
             $bukti_pembayaran = $request->file('bukti_pembayaran')->store('bukti_pembayaran');
@@ -44,13 +44,14 @@ class PersonalTrainerController extends Controller
             'tanggal_mulai' => $request->input('tanggal_mulai'),
         ]);
 
-        Invoice::create([
-            'tanggal' => now(),
-            'members_id' => $request->input('nama'),
-            'nominal' => $this->getNominal($request->input('sesi')),
-            'tipe_invoice' => 'Register Personal Trainer',
-            'bukti_pembayaran' => $bukti_pembayaran,
-        ]);
+        // Invoice::create([
+        //     'tanggal' => now(),
+        //     'members_id' => $request->input('nama'),
+        //     'sesi_pt' => $this->getNameSesi($request->input('sesi')),
+        //     'nominal' => $this->getNominal($request->input('sesi')),
+        //     'tipe_invoice' => 'Register Personal Trainer',
+        //     'bukti_pembayaran' => $bukti_pembayaran,
+        // ]);
 
         return redirect()->route('admin.trainer')->with('success', 'Data berhasil disimpan');
     }
@@ -95,5 +96,52 @@ class PersonalTrainerController extends Controller
         ];
 
         return $names[$sesi] ?? 'Null';
+    }
+
+    public function updateVisit($id)
+    {
+        $trainer = PersonalTrainer::find($id);
+
+        if ($trainer) {
+            $trainer->visit = ($trainer->visit ? $trainer->visit : 0) + 1;
+            $trainer->save();
+
+            return response()->json([
+                'message' => '<div class="text-center mt-3">
+                    <span style="color:green; font-weight:bold; font-size:30px">Personal Trainer ' . $trainer->nama . ' berhasil check-in. Total visit: ' . $trainer->visit . '</span>
+                    <br>
+                    <span style="color:blue; font-weight:bold; font-size:20px">Total visit sekarang: ' . $trainer->visit . ' x</span>
+                </div>',
+                'success' => true
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'Personal Trainer tidak ditemukan',
+                'success' => false
+            ]);
+        }
+    }
+
+    public function checkInByName($name)
+    {
+        Log::info('Received request to check in for trainer: ' . $name);
+
+        $trainer = PersonalTrainer::where('nama', $name)->first();
+
+        if (!$trainer) {
+            return response()->json(['message' => 'Trainer not found', 'success' => false], 404);
+        }
+
+        Log::info('Trainer found: ', $trainer->toArray());
+
+        $trainer->visit = ($trainer->visit ?? 0) + 1;
+        $trainer->save();
+
+        Log::info('Trainer visit updated: ', $trainer->toArray());
+
+        return response()->json([
+            'message' => 'Check-in successful. Total visits: ' . $trainer->visit,
+            'success' => true
+        ]);
     }
 }

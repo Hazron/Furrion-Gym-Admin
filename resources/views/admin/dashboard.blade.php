@@ -83,7 +83,8 @@
             </div>
         </div>
 
-        <!-- HASIL CEK MEMBER -->
+
+
         <div class="col-xl-6 col-lg-5">
             <div class="card mb-4 shadow-sm">
                 <div class="card-header py-3 bg-primary text-white d-flex align-items-center justify-content-center">
@@ -96,6 +97,45 @@
                     </div>
                     <div class="loading" id="loading-animation"></div> <!-- Loading animation element -->
                 </div>
+            </div>
+        </div>
+
+
+        <div class="col-xl-6 col-lg-5">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header py-3 bg-primary text-white d-flex align-items-center">
+                    <i class="fas fa-qrcode fa-lg mr-2"></i>
+                    <h6 class="m-0 font-weight-bold">Personal Trainer Session</h6>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="personalTrainer">Cari Nama :</label>
+                        <input type="text" class="form-control" id="personalTrainer" name="personalTrainer">
+                    </div>
+
+                    <button type="button" class="btn btn-primary" onclick="cekPT()">
+                        <i class="fas fa-check-circle mr-2"></i> Scan
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-6 col-lg-5">
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header py-3 bg-primary text-white d-flex align-items-center">
+                <i class="fas fa-qrcode fa-lg mr-2"></i>
+                <h6 class="m-0 font-weight-bold">Member PerVisit</h6>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="qrcode">Tuliskan Nama :</label>
+                    <input type="text" class="form-control" id="perVisit" name="perVisit">
+                </div>
+
+                <button type="button" class="btn btn-primary" onclick="inputVisit()">
+                    <i class="fas fa-check-circle mr-2"></i> Scan
+                </button>
             </div>
         </div>
     </div>

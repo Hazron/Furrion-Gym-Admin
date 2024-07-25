@@ -17,6 +17,8 @@ class Invoice extends Model
         'nominal',
         'tipe_invoice',
         'bukti_pembayaran',
+        'sesi_pt',
+        'paket_member',
     ];
 
     protected $casts = [

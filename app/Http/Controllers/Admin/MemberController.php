@@ -198,5 +198,4 @@ class MemberController extends Controller
 
         return response()->json(['status' => 'success', 'message' => 'Member berhasil dihapus.']);
     }
-
 }

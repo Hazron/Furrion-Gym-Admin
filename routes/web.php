@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/dashboard-admin', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/cekMember/{nama}', [DashboardController::class, 'cekMember']);
+    Route::get('admin/cekPT/{nama}', [DashboardController::class, 'cekPT']);
 
     //PAKET
     Route::get('/paket', [PaketMemberController::class, 'index'])->name('admin.paket');
@@ -48,6 +49,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     //PERSONAL TRAINER
     route::get('/personal-trainner', [PersonalTrainerController::class, 'index'])->name('admin.trainer');
     Route::post('/personal_trainers/store', [PersonalTrainerController::class, 'store'])->name('personal_trainers.store');
+    Route::put('personal-trainners/{name}', [PersonalTrainerController::class, 'checkInByName'])->name('personal_trainers.checkinbyname');
 
     //INVOICE
     route::get('/invoicee', [invoiceController::class, 'index'])->name('admin.invoice');

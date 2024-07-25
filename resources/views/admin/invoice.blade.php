@@ -48,6 +48,7 @@
             processing: true,
             serverSide: true,
             ajax: "{{ route('data-invoice') }}",
+            type: "GET",
             columns: [{
                     data: 'tanggal',
                     name: 'tanggal'
