@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('paket_memeber')->nullable();
             $table->string('nominal');
             $table->string('tipe_invoice'); //update member, regis member, penjualan barang
-            $table->string('bukti_pembayaran');
+            $table->string('bukti_pembayaran')->nullable();
             $table->timestamps();
         });
     }

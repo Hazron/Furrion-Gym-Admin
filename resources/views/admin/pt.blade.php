@@ -76,10 +76,22 @@
                                                 @if ($trainer->status == 'Aktif')
                                                     <a class="dropdown-item disabled" href="#">Tambah Sesi</a>
                                                 @else
-                                                    <a class="dropdown-item" href="#">Tambah Sesi</a>
+                                                    <a class="dropdown-item tambah-sesi" href="#"
+                                                        data-id-pt="{{ $trainer->id_pt }}">Tambah Sesi</a>
                                                 @endif
-                                                <a class="dropdown-item" href="#">Hadir</a>
-
+                                                @if ($trainer->status == 'Aktif')
+                                                    <a class="dropdown-item update-visit"
+                                                        href="{{ route('personal_trainer.update_visit', $trainer->id_pt) }}"
+                                                        data-form-id="update-visit-form-{{ $trainer->id_pt }}">Hadir</a>
+                                                    <form id="update-visit-form-{{ $trainer->id_pt }}"
+                                                        action="{{ route('personal_trainer.update_visit', $trainer->id_pt) }}"
+                                                        method="POST" style="display: none;">
+                                                        @csrf
+                                                        @method('PUT')
+                                                    </form>
+                                                @else
+                                                    <a class="dropdown-item disabled" href="#">Hadir</a>
+                                                @endif
                                                 <div class="dropdown-divider"></div>
                                                 <a class="dropdown-item text-danger" href="#">Delete</a>
                                             </div>
@@ -87,6 +99,7 @@
                                     </td>
                                 </tr>
                             @endforeach
+
                         </tbody>
                     </table>
                 </div>
@@ -158,10 +171,67 @@
                         <button type="submit" class="btn btn-primary">Simpan</button>
                     </div>
                     </form>
-
                 </div>
             </div>
         </div>
+
+        <!-- Modal Tambah Sesi -->
+        <div class="modal fade" id="modalTambahSesi" tabindex="-1" role="dialog"
+            aria-labelledby="modalTambahSesiLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalTambahSesiLabel">Tambah Sesi</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="#" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div class="form-group">
+                                <label for="nama_member" class="col-form-label">Nama Member:</label>
+                                <input type="text" class="form-control" id="nama_member" name="nama_member"
+                                    value="" readonly>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="sesi" class="col-form-label">Sesi:</label>
+                                <select class="form-control" id="sesi" name="sesi">
+                                    <option value="">--Pilih--</option>
+                                    <option value="1">Single Session 10x</option>
+                                    <option value="2">Single Session 20x</option>
+                                    <option value="3">Single Session 50x</option>
+                                    <option value="4">Couple Session 10x</option>
+                                    <option value="5">Couple Session 20x</option>
+                                    <option value="6">Couple Session 50x</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="tanggal_mulai" class="col-form-label">Tanggal Mulai:</label>
+                                <input type="date" class="form-control" id="tanggal_mulai" name="tanggal_mulai"
+                                    value="{{ date('Y-m-d') }}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="bukti_pembayaran">Bukti Pembayaran (Opsional)</label>
+                                <input type="file" class="form-control" id="bukti_pembayaran"
+                                    name="bukti_pembayaran">
+                            </div>
+
+                            <input type="hidden" name="id_pt" id="id_pt">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
     </div>
     <!--Row-->
 
@@ -204,6 +274,20 @@
         sesiSelect.addEventListener('change', function() {
             const selectedValue = sesiSelect.value;
             nominalInput.value = hargaSesi[selectedValue] || 'Pilih sesi terlebih dahulu';
+        });
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+        const updateVisitLinks = document.querySelectorAll('a.update-visit');
+
+        updateVisitLinks.forEach(link => {
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+
+                if (confirm('Apakah Anda yakin ingin menambahkan visit?')) {
+                    const formId = this.getAttribute('data-form-id');
+                    document.getElementById(formId).submit();
+                }
+            });
         });
     });
 </script>

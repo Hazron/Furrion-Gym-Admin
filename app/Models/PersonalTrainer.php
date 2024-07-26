@@ -10,6 +10,7 @@ class PersonalTrainer extends Model
     use HasFactory;
 
     protected $table = 'personal_trainers';
+    protected $primaryKey = 'id_pt';
 
     protected $fillable = [
         'sesi',

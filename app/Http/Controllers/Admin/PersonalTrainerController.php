@@ -98,50 +98,22 @@ class PersonalTrainerController extends Controller
         return $names[$sesi] ?? 'Null';
     }
 
-    public function updateVisit($id)
+    public function updateVisit($id) //DONE
     {
-        $trainer = PersonalTrainer::find($id);
+        $trainer = PersonalTrainer::findOrFail($id);
 
-        if ($trainer) {
-            $trainer->visit = ($trainer->visit ? $trainer->visit : 0) + 1;
+        if ($trainer->visit < $trainer->maksimal_visit) {
+            $trainer->visit += 1;
             $trainer->save();
 
-            return response()->json([
-                'message' => '<div class="text-center mt-3">
-                    <span style="color:green; font-weight:bold; font-size:30px">Personal Trainer ' . $trainer->nama . ' berhasil check-in. Total visit: ' . $trainer->visit . '</span>
-                    <br>
-                    <span style="color:blue; font-weight:bold; font-size:20px">Total visit sekarang: ' . $trainer->visit . ' x</span>
-                </div>',
-                'success' => true
-            ]);
-        } else {
-            return response()->json([
-                'message' => 'Personal Trainer tidak ditemukan',
-                'success' => false
-            ]);
-        }
-    }
+            if ($trainer->visit >= $trainer->maksimal_visit) {
+                $trainer->status = 'Tidak Aktif';
+                $trainer->save();
+            }
 
-    public function checkInByName($name)
-    {
-        Log::info('Received request to check in for trainer: ' . $name);
-
-        $trainer = PersonalTrainer::where('nama', $name)->first();
-
-        if (!$trainer) {
-            return response()->json(['message' => 'Trainer not found', 'success' => false], 404);
+            return redirect()->route('admin.trainer')->with('success', 'Visit berhasil ditambahkan.');
         }
 
-        Log::info('Trainer found: ', $trainer->toArray());
-
-        $trainer->visit = ($trainer->visit ?? 0) + 1;
-        $trainer->save();
-
-        Log::info('Trainer visit updated: ', $trainer->toArray());
-
-        return response()->json([
-            'message' => 'Check-in successful. Total visits: ' . $trainer->visit,
-            'success' => true
-        ]);
+        return redirect()->route('admin.trainer')->with('error', 'Visit maksimal sudah tercapai.');
     }
 }

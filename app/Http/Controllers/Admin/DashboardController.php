@@ -7,6 +7,7 @@ use App\Models\Members;
 use App\Models\PersonalTrainer;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -14,7 +15,8 @@ class DashboardController extends Controller
     {
         $totalAmount = Invoice::sum('nominal');
         $totalAmount = $totalAmount ? $totalAmount : 0;
-        return view('admin.dashboard', compact('totalAmount'));
+        $totalMembers = Members::where('status', 'aktif')->count();
+        return view('admin.dashboard', compact('totalAmount', 'totalMembers'));
     }
 
     public function cekMember($nama)
@@ -45,15 +47,33 @@ class DashboardController extends Controller
                     <span style="color:blue; font-weight:bold; font-size:20px">Apakah ingin melakukan Check In? (Telah visit ' . $trainer->visit . ' x)</span>
                     <br>
                     <div class="text-center">
-                        <a href="#" class="btn btn-primary btn-sm" onclick="checkIn(' . $trainer->nama . ')">Check In</a>
+                        <a href="' . route('admin.trainer') . '" class="btn btn-primary btn-sm">Check In</a>
                     </div>
                 </div>'
                 ]);
             } else {
-                return response()->json(['message' => '<span style="color:red; font-weight:bold; font-size:24px">Personal Trainer ' . $trainer->nama . ' tidak aktif.</span>']);
+                return response()->json(['message' => '<span style="color:red; font-weight:bold; font-size:24px">Personal Trainer ' . $trainer->nama . ' tidak aktif. <br> Silakan Perpanjang Paket Personal Trainer</span>']);
             }
         } else {
             return response()->json(['message' => '<span style="color:red; font-weight:bold; font-size:30px">Personal Trainer tidak ditemukan</span>']);
+        }
+    }
+
+    public function storePerVisit(Request $request)
+    {
+        $nama = $request->input('perVisit');
+
+        if ($nama) {
+            $invoice = new Invoice();
+            $invoice->tanggal = Carbon::now()->format('Y-m-d');
+            $invoice->nominal = '40000,00';
+            $invoice->tipe_invoice = 'Member PerVisit';
+            $invoice->bukti_pembayaran = 'null';
+            $invoice->save();
+
+            return response()->json(['message' => 'Invoice berhasil ditambahkan']);
+        } else {
+            return response()->json(['message' => 'Member tidak ditemukan'], 404);
         }
     }
 }

@@ -68,10 +68,10 @@
                     <span>Personal Trainner</span>
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('admin.invoice') }}">
+            <li class="nav-item disabled">
+                <a class="nav-link" href="#" tabindex="-1" aria-disabled="true">
                     <i class="fas fa-fw fa-palette"></i>
-                    <span>Invoice</span>
+                    <span>Invoice (Soon)</span>
                 </a>
             </li>
             <hr class="sidebar-divider">
@@ -79,9 +79,9 @@
                 Barang Inventaris
             </div>
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('admin.barang') }}">
+                <a class="nav-link" href="#">
                     <i class="fas fa-fw fa-palette"></i>
-                    <span>Tabel Barang</span>
+                    <span>Tabel Barang (Soon)</span>
                 </a>
             </li>
         </ul>
