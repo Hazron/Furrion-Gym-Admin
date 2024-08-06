@@ -64,14 +64,17 @@ class DashboardController extends Controller
         $nama = $request->input('perVisit');
 
         if ($nama) {
+            // Simpan data ke tabel invoices
             $invoice = new Invoice();
             $invoice->tanggal = Carbon::now()->format('Y-m-d');
+            $invoice->members_id = 'null';
             $invoice->nominal = '40000,00';
             $invoice->tipe_invoice = 'Member PerVisit';
             $invoice->bukti_pembayaran = 'null';
             $invoice->save();
 
-            return response()->json(['message' => 'Invoice berhasil ditambahkan']);
+            // Refresh page
+            return response()->json(['message' => 'Invoice berhasil ditambahkan', 'refresh' => true]);
         } else {
             return response()->json(['message' => 'Member tidak ditemukan'], 404);
         }

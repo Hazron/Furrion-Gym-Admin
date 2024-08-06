@@ -109,6 +109,8 @@ class MemberController extends Controller
             } else {
                 return redirect()->back()->with('error', 'File must be a JPG or PNG and under 500KB.');
             }
+        } else {
+            $invoice->bukti_pembayaran = null;
         }
         $invoice->save();
 
@@ -191,8 +193,6 @@ class MemberController extends Controller
     public function deleteMember($id)
     {
         $member = Members::findOrFail($id);
-
-        // Lakukan operasi penghapusan jika diperlukan, misalnya menghapus file terkait
 
         $member->delete();
 

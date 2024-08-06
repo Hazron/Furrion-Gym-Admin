@@ -29,10 +29,7 @@ class PersonalTrainerController extends Controller
             'bukti_pembayaran' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:1028',
         ]);
 
-        $bukti_pembayaran = null;
-        if ($request->hasFile('bukti_pembayaran')) {
-            $bukti_pembayaran = $request->file('bukti_pembayaran')->store('bukti_pembayaran');
-        }
+        $bukti_pembayaran = $request->file('bukti_pembayaran')?->store('bukti_pembayaran');
 
         $personalTrainer = PersonalTrainer::create([
             'sesi' => $this->getNameSesi($request->input('sesi')),
