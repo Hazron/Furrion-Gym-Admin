@@ -56,8 +56,11 @@ class MemberController extends Controller
             ' . ($member->status != 'aktif' ?
                     '<a class="dropdown-item" href="#" data-toggle="modal" data-target="#tambahSesiModal" data-id="' . $member->id_members . '" onclick="setMemberId(' . $member->id_members . ')">Tambah Sesi</a>' :
                     '<a class="dropdown-item disabled" href="#" tabindex="-1" aria-disabled="true">Tambah Sesi</a>') . '
-            <div class="dropdown-divider"></div>
+
+            <div class="dropdown-divider"></div> 
             <a class="dropdown-item text-danger" href="#" onclick="hapusMember(\'' . $member->id_members . '\')">Delete</a>
+            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#tambahDurasiModal" data-id="' . $member->id_members . '">Tambah Durasi</a>' . '
+
         </div>
     </div>';
             })
@@ -74,19 +77,20 @@ class MemberController extends Controller
             'nama' => 'required',
             'jenis_kelamin' => 'required',
             'paket_member' => 'required',
+            'tanggal_mulai' => 'required',
         ]);
 
         $members = new Members();
         $members->nama = $request->nama;
         $members->jenis_kelamin = $request->jenis_kelamin;
         $members->paket_id = $request->paket_member;
-        $members->tanggal_daftar = Carbon::now();
+        $members->tanggal_daftar = $request->tanggal_mulai;
         $members->status = 'aktif';
         $members->no_telpon = $request->no_telpon;
 
         $paket = Paket::find($request->paket_member);
 
-        $tanggal_selesai = Carbon::now()->addMonths($paket->durasi);
+        $tanggal_selesai = Carbon::parse($request->tanggal_mulai)->addMonths($paket->durasi);
         $members->tanggal_selesai = $tanggal_selesai;
 
         $members->save();

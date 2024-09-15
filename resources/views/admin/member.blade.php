@@ -15,9 +15,15 @@
                 <div class="card mb-4">
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                         <h6 class="m-0 font-weight-bold text-primary">Daftar List Member</h6>
-                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal">
-                            Tambah
-                        </button>
+                        <div class="btn-group mt-2 mb-2" role="group" aria-label="Basic example">
+                            <button type="button" class="btn btn-success" data-toggle="modal"
+                                data-target="#exampleModal">
+                                Tambah
+                            </button>
+                            <button type="button" class="btn btn-success ml-2">
+                                Export
+                            </button>
+                        </div>
                     </div>
                     <div class="table-responsive p-3">
                         <table class="table align-items-center table-flush table-hover" id="dataTableMember">
@@ -91,6 +97,11 @@
                                 </select>
                             </div>
                             <div class="form-group">
+                                <label for="no_telpon" class="col-form-label">Tanggal Mulai</label>
+                                <input type="date" class="form-control" id="tanggal_mulai" name="tanggal_mulai"
+                                    value="2024-08-05" required>
+                            </div>
+                            <div class="form-group">
                                 <label for="paket_member" class="col-form-label">Paket Member</label>
                                 <select class="form-control" id="paket_member" name="paket_member" required>
                                     <option value="">--Pilih--</option>
@@ -102,7 +113,8 @@
                             <div class="form-group">
                                 <label for="bukti_pembayaran" class="col-form-label">Bukti Pembayaran
                                     (Opsional)</label>
-                                <input type="file" class="form-control" id="bukti_pembayaran" name="bukti_pembayaran">
+                                <input type="file" class="form-control" id="bukti_pembayaran"
+                                    name="bukti_pembayaran">
                             </div>
                     </div>
                     <div class="modal-footer">
@@ -117,8 +129,8 @@
         </div>
 
         <!-- Modal Tambah Sesi -->
-        <div class="modal fade" id="tambahSesiModal" tabindex="-1" role="dialog" aria-labelledby="tambahSesiModalLabel"
-            aria-hidden="true">
+        <div class="modal fade" id="tambahSesiModal" tabindex="-1" role="dialog"
+            aria-labelledby="tambahSesiModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -128,7 +140,8 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form method="POST" action="{{ route('member.update-sesi') }}" enctype="multipart/form-data">
+                        <form method="POST" action="{{ route('member.update-sesi') }}"
+                            enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" name="id_members" id="id_members" value="">
                             <div class="form-group">
@@ -142,13 +155,57 @@
                             </div>
                             <div class="form-group">
                                 <label for="bukti_pembayaran">Bukti Pembayaran (Opsional)</label>
-                                <input type="file" class="form-control" id="bukti_pembayaran" name="bukti_pembayaran">
+                                <input type="file" class="form-control" id="bukti_pembayaran"
+                                    name="bukti_pembayaran">
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                 <button type="submit" class="btn btn-primary"
                                     onclick="this.disabled=true;this.form.submit();">Simpan</button>
                             </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Modal Tambah Durasi --}}
+        <!-- Modal Tambah Durasi -->
+        <div class="modal fade" id="tambahDurasiModal" tabindex="-1" role="dialog"
+            aria-labelledby="tambahDurasiModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="tambahDurasiModalLabel">Tambah Durasi Member</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {{-- <form method="POST" action="{{ route('member.tambah-durasi') }}">
+                            @csrf --}}
+                        <input type="hidden" name="id_members" id="id_members" value="">
+                        <div class="form-group">
+                            <label for="tanggal_mulai" class="col-form-label">Tanggal Mulai</label>
+                            <input type="date" class="form-control" id="tanggal_mulai" name="tanggal_mulai"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="paketMember" class="col-form-label">Paket Member</label>
+                            <select class="form-control" id="paketMember" name="paketMember" required>
+                                <option value="">--Pilih--</option>
+                                @foreach ($paket as $paketMember)
+                                    <option value="{{ $paketMember->durasi }}">{{ $paketMember->nama_paket }}
+                                        ({{ $paketMember->durasi }} Bulan)
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary"
+                                onclick="this.disabled=true;this.form.submit();">Simpan</button>
+                        </div>
                         </form>
                     </div>
                 </div>
@@ -167,55 +224,53 @@
 @include('admin.layouts.footer')
 
 <script>
-
-
-    $(document).ready(function () {
+    $(document).ready(function() {
         $('#dataTableMember').DataTable({
             processing: true,
             serverSide: true,
             ajax: "{{ route('data.members') }}",
             columns: [{
-                data: 'tanggal_daftar',
-                name: 'tanggal_daftar'
-            },
-            {
-                data: 'nama',
-                name: 'nama'
-            },
-            {
-                data: 'nama_paket',
-                name: 'nama_paket'
-            },
-            {
-                data: 'tanggal_selesai',
-                name: 'tanggal_selesai'
-            },
-            {
-                data: 'status',
-                name: 'status'
-            },
-            {
-                data: 'nomor_telepon',
-                name: 'nomor_telepon'
-            },
-            {
-                data: 'action',
-                name: 'action',
-                orderable: false,
-                searchable: false
-            }
+                    data: 'tanggal_daftar',
+                    name: 'tanggal_daftar'
+                },
+                {
+                    data: 'nama',
+                    name: 'nama'
+                },
+                {
+                    data: 'nama_paket',
+                    name: 'nama_paket'
+                },
+                {
+                    data: 'tanggal_selesai',
+                    name: 'tanggal_selesai'
+                },
+                {
+                    data: 'status',
+                    name: 'status'
+                },
+                {
+                    data: 'nomor_telepon',
+                    name: 'nomor_telepon'
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false
+                }
             ]
         });
     });
 
-    $('#tambahSesiModal').on('show.bs.modal', function (event) {
+    $('#tambahSesiModal').on('show.bs.modal', function(event) {
         var button = $(event.relatedTarget);
         var memberId = button.data('id');
         var modal = $(this);
         modal.find('.modal-body #id_member').val(memberId);
     });
 
-    $('form').on('submit', function (e) {
+    $('form').on('submit', function(e) {
         e.preventDefault();
 
         var formData = new FormData(this);
@@ -226,13 +281,13 @@
             data: formData,
             contentType: false,
             processData: false,
-            success: function (response) {
+            success: function(response) {
                 if (response.status === 'success') {
                     alert(response.message);
                     location.reload();
                 }
             },
-            error: function (xhr) {
+            error: function(xhr) {
                 var errorResponse = JSON.parse(xhr.responseText);
                 alert(errorResponse.message);
             }
@@ -252,12 +307,12 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '{{ url("members") }}/' + id,
+                    url: '{{ url('members') }}/' + id,
                     type: 'DELETE',
                     data: {
                         "_token": "{{ csrf_token() }}"
                     },
-                    success: function (response) {
+                    success: function(response) {
                         if (response.status === 'success') {
                             Swal.fire(
                                 'Deleted!',
@@ -274,7 +329,7 @@
                             );
                         }
                     },
-                    error: function (xhr) {
+                    error: function(xhr) {
                         Swal.fire(
                             'Error!',
                             'Terjadi kesalahan saat menghapus data.',
