@@ -49,9 +49,9 @@
                                     </div>
                                 @endif
                                 <tr>
-                                    <th>Tanggal Daftar</th>
                                     <th>Nama Member</th>
                                     <th>Paket Member</th>
+                                    <th>Tanggal Daftar</th>
                                     <th>Tanggal Selesai</th>
                                     <th>Status</th>
                                     <th>Nomor Telepon</th>
@@ -99,7 +99,7 @@
                             <div class="form-group">
                                 <label for="no_telpon" class="col-form-label">Tanggal Mulai</label>
                                 <input type="date" class="form-control" id="tanggal_mulai" name="tanggal_mulai"
-                                    value="2024-08-05" required>
+                                    value="{{ date('Y-m-d') }}" required>
                             </div>
                             <div class="form-group">
                                 <label for="paket_member" class="col-form-label">Paket Member</label>
@@ -182,30 +182,23 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        {{-- <form method="POST" action="{{ route('member.tambah-durasi') }}">
-                            @csrf --}}
-                        <input type="hidden" name="id_members" id="id_members" value="">
-                        <div class="form-group">
-                            <label for="tanggal_mulai" class="col-form-label">Tanggal Mulai</label>
-                            <input type="date" class="form-control" id="tanggal_mulai" name="tanggal_mulai"
-                                required>
-                        </div>
-                        <div class="form-group">
-                            <label for="paketMember" class="col-form-label">Paket Member</label>
-                            <select class="form-control" id="paketMember" name="paketMember" required>
-                                <option value="">--Pilih--</option>
-                                @foreach ($paket as $paketMember)
-                                    <option value="{{ $paketMember->durasi }}">{{ $paketMember->nama_paket }}
-                                        ({{ $paketMember->durasi }} Bulan)
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary"
-                                onclick="this.disabled=true;this.form.submit();">Simpan</button>
-                        </div>
+                        <form method="POST" action="{{ route('member.tambah-durasi') }}">
+                            @csrf
+                            <input type="hidden" name="id_members" id="id_members" value="">
+                            <div class="form-group">
+                                <label for="paketMember" class="col-form-label">Paket Member</label>
+                                <select class="form-control" id="paketMember" name="paketMember" required>
+                                    <option value="">--Pilih--</option>
+                                    @foreach ($paket as $item)
+                                        <option value="{{ $item->id_pakets }}">{{ $item->nama_paket }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary"
+                                    onclick="this.disabled=true;this.form.submit();">Simpan</button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -230,10 +223,6 @@
             serverSide: true,
             ajax: "{{ route('data.members') }}",
             columns: [{
-                    data: 'tanggal_daftar',
-                    name: 'tanggal_daftar'
-                },
-                {
                     data: 'nama',
                     name: 'nama'
                 },
@@ -242,7 +231,30 @@
                     name: 'nama_paket'
                 },
                 {
+                    data: 'tanggal_daftar',
+                    render: function(data, type, row) {
+                        var date = new Date(data);
+                        const month = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                            "Juli", "Agustus", "September", "Oktober", "November",
+                            "Desember"
+                        ][date.getMonth()];
+                        const year = date.getFullYear();
+
+                        return date.getDate() + ' ' + month + ' ' + year;
+                    },
+                    name: 'tanggal_daftar'
+                },
+                {
                     data: 'tanggal_selesai',
+                    render: function(data, type, row) {
+                        var date = new Date(data);
+                        var month = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                            "Juli", "Agustus", "September", "Oktober", "November",
+                            "Desember"
+                        ][date.getMonth()];
+                        var year = date.getFullYear();
+                        return date.getDate() + ' ' + month + ' ' + year;
+                    },
                     name: 'tanggal_selesai'
                 },
                 {

@@ -55,7 +55,7 @@ class MemberController extends Controller
             aria-labelledby="dropdownMenuButton">
             ' . ($member->status != 'aktif' ?
                     '<a class="dropdown-item" href="#" data-toggle="modal" data-target="#tambahSesiModal" data-id="' . $member->id_members . '" onclick="setMemberId(' . $member->id_members . ')">Tambah Sesi</a>' :
-                    '<a class="dropdown-item disabled" href="#" tabindex="-1" aria-disabled="true">Tambah Sesi</a>') . '
+                    '<a class="dropdown-item disabled" href="#" tabindex="-1" aria-disabled="true">Tambah Sesi(Untuk nonaktif member)</a>') . '
 
             <div class="dropdown-divider"></div> 
             <a class="dropdown-item text-danger" href="#" onclick="hapusMember(\'' . $member->id_members . '\')">Delete</a>
@@ -69,7 +69,6 @@ class MemberController extends Controller
             ->rawColumns(['status', 'action', 'nama_paket'])
             ->make(true);
     }
-
 
     public function store(Request $request)
     {
@@ -163,6 +162,30 @@ class MemberController extends Controller
             ], 500);
         }
     }
+    public function tambahDurasi(Request $request)
+    {
+        $request->validate([
+            'id_members' => 'required|exists:members,id_members',
+            'paket_id' => 'required|exists:pakets,id_pakets',
+        ]);
+
+        try {
+            $member = Members::findOrFail($request->id_members);
+            $paket = Paket::findOrFail($request->paket_id);
+            $member->tanggal_selesai = $member->tanggal_selesai->addMonths($paket->durasi);
+            $member->save();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Durasi member berhasil ditambahkan.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 
     public function destroy($id)
     {
@@ -181,7 +204,6 @@ class MemberController extends Controller
             ], 500);
         }
     }
-
 
     public function autoDisableMember()
     {

@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\PersonalTrainerController;
 use App\Http\Controllers\Admin\invoiceController;
 use App\Http\Controllers\Admin\barangController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Owner\DashboardOwnerController;
 
 Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
 
@@ -46,6 +47,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('data-members', [MemberController::class, 'getData'])->name('data.members');
     Route::post('/member/update-sesi', [MemberController::class, 'updateSesiMember'])->name('member.update-sesi');
     Route::delete('/members/{id}', [MemberController::class, 'deleteMember'])->name('members.delete');
+    Route::post('/member/tambah-durasi', [MemberController::class, 'tambahDurasi'])->name('member.tambah-durasi');
 
 
     //PERSONAL TRAINER
@@ -61,6 +63,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/barang', [BarangController::class, 'index'])->name('admin.barang');
     Route::get('/barang/data', [BarangController::class, 'getData'])->name('barang.data');
     Route::post('/barang/store', [BarangController::class, 'store'])->name('barang.store');
+});
+
+Route::middleware(['auth', 'owner'])->group(function () {
+    Route::get('/dashboard-owner', [DashboardOwnerController::class, 'index'])->name('dashboard.owner');
 });
 
 require __DIR__ . '/auth.php';
